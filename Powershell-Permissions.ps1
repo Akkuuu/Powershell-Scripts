@@ -78,11 +78,7 @@ Function Remove-ACL {
     }
 }
 
-        $PayrollBenefits = 'Atira-wrs.local\HR-Drive-Payroll & Benefits'
-        $HRDriveHR = 'Atira-wrs.local\HR-Drive-HR'
-        $HRDriveRelief = 'Atira-wrs.local\HR-Drive-Relief'
-        $HRDriveHealth = 'Atira-wrs.local\HR-Drive-Health'
-        $HRDriveSuperUser = 'Atira-wrs.local\HR-Drive-Superuser'
+        $ExampleGroup = 'DOMAIN.LOCAL\TEST'
 
         Try  {
 
