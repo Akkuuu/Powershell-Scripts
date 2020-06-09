@@ -55,7 +55,6 @@ Function Remove-ACL {
 
                     # Add local admin
                     $DomainMain = 'BUILTIN\Administrators'
-                    #$DomainAdmins = 'atira\aayal'
                     $permission  = $domainmain, "FullControl", "ContainerInherit,ObjectInherit","None","Allow"
                     $permission2  = $DomainAdmins, "FullControl", "ContainerInherit,ObjectInherit","None","Allow"
 
