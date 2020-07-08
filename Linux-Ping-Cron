@@ -1,0 +1,23 @@
+  GNU nano 2.9.3                                                                                                    deadman.sh
+
+#!/bin/bash
+HOSTS="207.81.XXX.XXX"
+COUNT=1
+
+pingtest(){
+  for myHost in "$@"
+  do
+    ping -c "$COUNT" "$myHost" && return 1
+  done
+  return 0
+}
+
+if pingtest $HOSTS
+then
+  # 100% failed
+  echo "Server failed at $(date)" | swaks --to <email> -s smtp.outlook.com:587 --from <email> -tls -au <email> -ap <'password'> --header "Subject: Server is down!" --body "Couldn't ping the Server, CHECK ASAP"
+  echo "Sage server ($HOSTS) is down (ping failed) at $(date)"
+fi
+
+#Crontab code: */5 * * * * /home/examples/test.sh
+#Crontab -l
