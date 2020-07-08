@@ -1,0 +1,37 @@
+$server = 'test' #
+
+## Clear Screen
+#Clear
+$cred = Get-Credential
+## Get Script Path
+$ScriptPath = Split-Path -parent $MyInvocation.MyCommand.Definition
+
+## Set Source Path
+$SourcePath = "\\FOGHORN\IT\Deployment_Client.msi"
+
+## Enabling Windows Remote Services, Configure WinRM listener, WinRM Firewall exceptions enabled
+# Start WinRM service (Windows Remote Management (WS-Management)), set to auto automatic start.
+
+Enable-PSRemoting -SkipNetworkProfileCheck -Force
+Set-Item wsman:\localhost\client\trustedhosts * -Force
+Restart-Service WinRM 
+
+# ByPass the ExecutionPolicy
+Try { Set-ExecutionPolicy -ExecutionPolicy 'ByPass' -Scope 'Process' -Force -ErrorAction 'Stop' } Catch {}
+
+#Set server array from file - Verify that server hostnames have been added to the 'servers.txt' file
+#$servers = get-content $ScriptPath\servers.txt
+
+## Run installation on all named servers
+
+    ## Installing on remote server
+    ForEach ($comp in $server) {
+    $session = New-PSSession -Credential($cred) -ComputerName $server 
+    Copy-Item -Path $SourcePath -ToSession $session -Destination 'C:\Test\Deployment_Client.msi'
+    #Get-Service remoteregistry -ComputerName $server | start-service
+    Invoke-Command -Session $session -ScriptBlock{
+        Start-Process C:\Test\Deployment_Client.msi -Wait # /quiet
+        }
+ }
+    #Remove-PSSession $session
+    
