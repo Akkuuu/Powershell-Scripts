@@ -1,0 +1,14 @@
+$OutFile = "C:\Folder_Permissions.csv"
+$RootPath = "E:\Data"
+$Header = "Folder Path,IdentityReference,AccessLevel,IsInherited,InheritanceFlags,PropagationFlags"
+Add-Content -Value $Header -Path $OutFile 
+$Folders = Get-childitem2 $RootPath -recurse -depth 1 -Directory
+foreach ($Folder in $Folders){
+	$ACLs = get-acl $Folder.fullname | ForEach-Object { $_.Access  }
+	Foreach ($ACL in $ACLs){
+		$OutInfo = $Folder.Fullname + "," + $ACL.IdentityReference  + "," + $ACL.FileSystemRights + "," + $ACL.IsInherited + "," + $ACL.InheritanceFlags + "," + $ACL.PropagationFlags
+		Add-Content -Value $OutInfo -Path $OutFile
+	}
+}
+
+#ntfs-security must be installed
